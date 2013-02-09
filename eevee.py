@@ -17,13 +17,15 @@
 # Import some necessary libraries.
 
 import socket 
-
+import re
 
        
 server = "irc.freenode.net" 
 channel = "#alfaqui" 
-botnick = "TsurugiBot"
-MASTERS=["alfateam123"] 
+botnick = "EeveeBot"
+MASTERS=[] #who can say EeveeBot !gtfo? Their names are written here. 
+
+PRIVMSG_TO_CHAN_REGEX=re.compile("^:(?P<username>\w+)!~(?P<hostname>\w+)@(?P<servername>[\w\.\-]+) PRIVMSG #(?P<channelname>\w+) :(?P<content>.+)")
 
 def ping():
   ircsock.send("PONG :pingis\n")  
@@ -35,9 +37,10 @@ def joinchan(chan):
   ircsock.send("JOIN "+ chan +"\n")
 
 def userFromPrivMsg(ircmsg):
-  if ircmsg.find("PRIVMSG"):
-    return ircmsg[1:ircmsg.find("!")]
-  return ""
+  try:
+    return PRIVMSG_TO_CHAN_REGEX.findall(ircmsg)[0][0] #that's the username
+  except IndexError:
+    return "" #TODO:we have to control also the PRIVMSG_TO_USER_REGEX
 
 def fb():
   ircsock.send("PRIVMSG "+ channel +" :Follow us on facebook! <link here>\n")
@@ -55,6 +58,7 @@ while 1:
   ircmsg = ircsock.recv(2048)
   ircmsg = ircmsg.strip('\n\r') 
   print(ircmsg)
+  #print userFromPrivMsg(ircmsg) #decomment while testing
   if ircmsg.find(":!fb ") != -1: 
     fb()
   if ircmsg.find(":ciao "+ botnick) !=-1: 
