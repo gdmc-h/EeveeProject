@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#    Copyright (C) 2013 JustHvost
+#    Copyright (C) 2013 JustHvost & Alfateam123
 #
 #    Eevee is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -16,21 +16,22 @@
 #    along with Eevee.  If not, see <http://www.gnu.org/licenses/>.
 # Import some necessary libraries.
 
+
 import socket 
 import re
 
        
-server = "irc.freenode.net" 
-channel = "#alfaqui" 
-botnick = "EeveeBot"
-MASTERS=[] #who can say EeveeBot !gtfo? Their names are written here. 
+server = "irc.freenode.net" #server name
+chan = "#alfaqui" #channel name
+bot = "EeveeBot" #bot name
+MASTERS=["<yourusernamehere>"] #who can say EeveeBot !gtfo? Their names are written here. 
 
 PRIVMSG_TO_CHAN_REGEX=re.compile("^:(?P<username>\w+)!~(?P<hostname>\w+)@(?P<servername>[\w\.\-]+) PRIVMSG #(?P<channelname>\w+) :(?P<content>.+)")
 
 def ping():
   ircsock.send("PONG :pingis\n")  
 
-def sendmsg(chan , msg): 
+def sendmsg(chan , msg): #Note: We've the "sendmsg" function, but we still use "ircsock.send"... Well, fuck me!
   ircsock.send("PRIVMSG "+ chan +" :"+ msg +"\n") 
 
 def joinchan(chan): 
@@ -42,11 +43,12 @@ def userFromPrivMsg(ircmsg):
   except IndexError:
     return "" #TODO:we have to control also the PRIVMSG_TO_USER_REGEX
 
-def fb():
+def fb(): 
   ircsock.send("PRIVMSG "+ channel +" :Follow us on facebook! <link here>\n")
-def hi():
+def hi(): 
   ircsock.send("PRIVMSG "+ channel +" :hi!\n")
                   
+#DO NOT CHANGE THESE FUCKING THINGS! FFS!
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ircsock.connect((server, 6667)) 
 ircsock.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :lol\n") 
