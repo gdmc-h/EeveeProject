@@ -24,15 +24,19 @@ import re
 server = "irc.freenode.net" #server name
 chan = "#alfaqui" #channel name
 bot = "EeveeBot" #bot name
-MASTERS=["<yourusernamehere>"] #who can say EeveeBot !gtfo? Their names are written here. 
+MASTERS=["JustHvost"] #who can say EeveeBot !gtfo? Their names are written here. 
+
 
 PRIVMSG_TO_CHAN_REGEX=re.compile("^:(?P<username>\w+)!~(?P<hostname>\w+)@(?P<servername>[\w\.\-]+) PRIVMSG #(?P<channelname>\w+) :(?P<content>.+)")
 
 def ping():
   ircsock.send("PONG :pingis\n")  
 
-def sendmsg(chan , msg): #Note: We've the "sendmsg" function, but we still use "ircsock.send"... Well, fuck me!
+def sendmsg(chan , msg): 
   ircsock.send("PRIVMSG "+ chan +" :"+ msg +"\n") 
+  
+def kick(chan, user, why): #KICK <channel> <client> [<message>]
+  ircsock.send("KICK "+ chan +" "+ user + " " + why + "\r\n")
 
 def joinchan(chan): 
   ircsock.send("JOIN "+ chan +"\n")
@@ -44,28 +48,42 @@ def userFromPrivMsg(ircmsg):
     return "" #TODO:we have to control also the PRIVMSG_TO_USER_REGEX
 
 def fb(): 
-  ircsock.send("PRIVMSG "+ channel +" :Follow us on facebook! <link here>\n")
+  sendmsg(chan, "Follow us on Facebook: <link here>\n")
 def hi(): 
-  ircsock.send("PRIVMSG "+ channel +" :hi!\n")
+  sendmsg(chan, "Sup bro!?\n")
                   
 #DO NOT CHANGE THESE FUCKING THINGS! FFS!
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ircsock.connect((server, 6667)) 
-ircsock.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :lol\n") 
-ircsock.send("NICK "+ botnick +"\n") 
+ircsock.send("USER "+ bot +" "+ bot +" "+ bot +" :lol\n") 
+ircsock.send("NICK "+ bot +"\n") 
 
-joinchan(channel) 
+joinchan(chan) 
 
 while 1: 
   ircmsg = ircsock.recv(2048)
   ircmsg = ircmsg.strip('\n\r') 
   print(ircmsg)
-  #print userFromPrivMsg(ircmsg) #decomment while testing
+  print userFromPrivMsg(ircmsg) #decomment while testing
+  
   if ircmsg.find(":!fb ") != -1: 
     fb()
-  if ircmsg.find(":ciao "+ botnick) !=-1: 
+
+  if ircmsg.find(":ciao "+ bot) !=-1: 
     hi()
+
+  if ircmsg.find(":!say") != -1:
+    ss = ircmsg.split(":!say")
+    ssc = ss[1].strip()
+    sendmsg(chan ,str(ssc))
+
+  if ircmsg.find(":!kick") != -1 and userFromPrivMsg(ircmsg) in MASTERS:
+    kk = ircmsg.split(":!kick")
+    kck = kk[1].strip()
+    kick(chan, str(kck), "GTFO.")
+
   if ircmsg.find(":!gtfo") !=-1 and userFromPrivMsg(ircmsg) in MASTERS:
-    ircsock.send("QUIT\n")
+    ircsock.send("QUIT CYA!\n")
+
   if ircmsg.find("PING :") !=-1: 
     ping()
