@@ -2,18 +2,18 @@
 
 #    Copyright (C) 2013 JustHvost & Alfateam123
 #
-#    Eevee is free software: you can redistribute it and/or modify
+#    EeveeProject is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
-#    Eevee is distributed in the hope that it will be useful,
+#    EeveeProject is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with Eevee.  If not, see <http://www.gnu.org/licenses/>.
+#    along with EeveeProject.  If not, see <http://www.gnu.org/licenses/>.
 # Import some necessary libraries.
 
 
@@ -22,9 +22,9 @@ import re
 
        
 server = "irc.freenode.net" #server name
-chan = "#alfaqui" #channel name
-bot = "EeveeBot" #bot name
-MASTERS=["JustHvost"] #who can say EeveeBot !gtfo? Their names are written here. 
+chan = " " #channel name
+bot = "EeveeProject" #bot name
+MASTERS=[" "] #channel's op 
 
 
 PRIVMSG_TO_CHAN_REGEX=re.compile("^:(?P<username>\w+)!~(?P<hostname>\w+)@(?P<servername>[\w\.\-]+) PRIVMSG #(?P<channelname>\w+) :(?P<content>.+)")
