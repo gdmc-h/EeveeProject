@@ -22,8 +22,8 @@ import socket
        
 server = "irc.freenode.net" 
 channel = "#alfaqui" 
-botnick = "EeveeBot" 
-
+botnick = "TsurugiBot"
+MASTERS=["alfateam123"] 
 
 def ping():
   ircsock.send("PONG :pingis\n")  
@@ -33,6 +33,11 @@ def sendmsg(chan , msg):
 
 def joinchan(chan): 
   ircsock.send("JOIN "+ chan +"\n")
+
+def userFromPrivMsg(ircmsg):
+  if ircmsg.find("PRIVMSG"):
+    return ircmsg[1:ircmsg.find("!")]
+  return ""
 
 def fb():
   ircsock.send("PRIVMSG "+ channel +" :Follow us on facebook! <link here>\n")
@@ -54,7 +59,7 @@ while 1:
     fb()
   if ircmsg.find(":ciao "+ botnick) !=-1: 
     hi()
-  if ircmsg.find(":!gtfo") !=-1:
-    ircsock.send("QUIT\n") 
+  if ircmsg.find(":!gtfo") !=-1 and userFromPrivMsg(ircmsg) in MASTERS:
+    ircsock.send("QUIT\n")
   if ircmsg.find("PING :") !=-1: 
     ping()
