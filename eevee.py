@@ -22,12 +22,13 @@ import re
 
        
 server = "irc.freenode.net" #server name
-chan = " " #channel name
-bot = "EeveeProject" #bot name
-MASTERS=[" "] #channel's op 
+chan = "#alfaqui" #channel name
+bot = "TsurugiBot" #bot name
+MASTERS=["alfateam123"] #channel's op 
 
 
 PRIVMSG_TO_CHAN_REGEX=re.compile("^:(?P<username>\w+)!~(?P<hostname>\w+)@(?P<servername>[\w\.\-]+) PRIVMSG #(?P<channelname>\w+) :(?P<content>.+)")
+PRIVMSG_TO_USER_REGEX=re.compile("^:(?P<username>\w+)!~(?P<hostname>\w+)@(?P<servername>[\w\.\-]+) PRIVMSG (?P<receiver>\w+) :(?P<content>.+)")
 
 def ping():
   ircsock.send("PONG :pingis\n")  
@@ -43,9 +44,12 @@ def joinchan(chan):
 
 def userFromPrivMsg(ircmsg):
   try:
-    return PRIVMSG_TO_CHAN_REGEX.findall(ircmsg)[0][0] #that's the username
+    return PRIVMSG_TO_CHAN_REGEX.findall(ircmsg)[0][0] #that's the sender
   except IndexError:
-    return "" #TODO:we have to control also the PRIVMSG_TO_USER_REGEX
+    try:
+      return PRIVMSG_TO_USER_REGEX.findall(ircmsg)[0][0] #that's the sender
+    except IndexError:
+      return "" #not a PRIVMSG message
 
 def fb(): 
   sendmsg(chan, "Follow us on Facebook: <link here>\n")
