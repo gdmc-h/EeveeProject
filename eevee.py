@@ -22,9 +22,9 @@ import re
 
        
 server = "irc.freenode.net" #server name
-chan = "#alfaqui" #channel name
-bot = "TsurugiBot" #bot name
-MASTERS=["alfateam123"] #channel's op 
+chan = " " #channel name
+bot = "EeveeProject" #bot name
+MASTERS=[" "] #channel's op 
 
 
 PRIVMSG_TO_CHAN_REGEX=re.compile("^:(?P<username>\w+)!~(?P<hostname>\w+)@(?P<servername>[\w\.\-]+) PRIVMSG #(?P<channelname>\w+) :(?P<content>.+)")
@@ -68,7 +68,7 @@ while 1:
   ircmsg = ircsock.recv(2048)
   ircmsg = ircmsg.strip('\n\r') 
   print(ircmsg)
-  print userFromPrivMsg(ircmsg) #decomment while testing
+  print userFromPrivMsg(ircmsg) 
   
   if ircmsg.find(":!fb ") != -1: 
     fb()
@@ -85,6 +85,8 @@ while 1:
     kk = ircmsg.split(":!kick")
     kck = kk[1].strip()
     kick(chan, str(kck), "GTFO.")
+    if str(kck) == bot:
+      joinchan(chan)
 
   if ircmsg.find(":!gtfo") !=-1 and userFromPrivMsg(ircmsg) in MASTERS:
     ircsock.send("QUIT CYA!\n")
