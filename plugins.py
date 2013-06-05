@@ -14,7 +14,7 @@ def gtfo(ircmsg, ircsock):
         if re.match("^!gtfo$", utils.content(ircmsg)):
 	    if utils.sender(ircmsg) in config.MASTERS:
 	        ircsock.send("QUIT see you later!\n")
-		sys.exit(0)
+		sys.exit(0) #it should quit itself, not just slack around.
 	    else:
 	        utils.sendmsg("gtfo to you, dipshit", utils.sender(ircmsg), ircsock)
     except ValueError:
