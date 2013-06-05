@@ -17,7 +17,10 @@
 #    
 import socket 
 import config
-                  
+
+def joinchan(chan):
+    ircsock.send("JOIN "+chan+"\n")
+
 #DO NOT CHANGE THESE FUCKING THINGS! FFS!
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 ircsock.connect((config.SERVER, 6667)) 

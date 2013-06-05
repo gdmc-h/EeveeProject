@@ -35,5 +35,6 @@ MASTERS = []
 
 plugins=(
      plugins.explode_test,
-     plugins.gtfo
+     plugins.gtfo,
+     plugins.log,
      )

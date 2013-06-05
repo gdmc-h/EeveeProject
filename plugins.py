@@ -2,6 +2,7 @@ import utils
 import re
 import config
 import sys
+import datetime
 
 def explode_test(ircmsg, ircsock):
     try:
@@ -19,3 +20,16 @@ def gtfo(ircmsg, ircsock):
 	        utils.sendmsg("gtfo to you, dipshit", utils.sender(ircmsg), ircsock)
     except ValueError:
         pass
+
+def log(ircmsg, ircsock):
+    logfile=open("log.txt", "a+")
+    try:
+        if utils.isPubMsg(ircmsg):
+            logfile.write("[%s] %s: %s"%(
+                        datetime.datetime.now(),
+			sender(ircmsg),
+			content(ircmsg)
+			))
+    except ValueError: pass
+    logfile.close()
+
